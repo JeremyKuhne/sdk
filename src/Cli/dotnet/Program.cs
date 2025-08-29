@@ -51,11 +51,27 @@ public class Program
         }
 
         // Avoid create temp directory with root permission and later prevent access in non sudo
-        if (SudoEnvironmentDirectoryOverride.IsRunningUnderSudo())
+        if (perfLogEnabled && SudoEnvironmentDirectoryOverride.IsRunningUnderSudo())
         {
             perfLogEnabled = false;
         }
 
+#if true
+        if (!perfLogEnabled && args.Length == 1 && args[0].Equals("--info", StringComparison.Ordinal))
+        {
+            return HandleErrors(() =>
+            {
+                CommandLineInfo.PrintInfo();
+                return 0;
+            });
+        }
+#endif
+
+        return MainPhase2(args, perfLogEnabled, startupTime, mainTimeStamp);
+    }
+
+    private static int MainPhase2(string[] args, bool perfLogEnabled, TimeSpan startupTime, DateTime mainTimeStamp)
+    {
         PerformanceLogStartupInformation startupInfo = null;
         if (perfLogEnabled)
         {
@@ -76,43 +92,45 @@ public class Program
 
             InitializeProcess();
 
-            try
-            {
-                return ProcessArgs(args, startupTime);
-            }
-            catch (Exception e) when (e.ShouldBeDisplayedAsError())
-            {
-                Reporter.Error.WriteLine(CommandLoggingContext.IsVerbose
-                    ? e.ToString().Red().Bold()
-                    : e.Message.Red().Bold());
-
-                var commandParsingException = e as CommandParsingException;
-                if (commandParsingException != null && commandParsingException.ParseResult != null)
-                {
-                    commandParsingException.ParseResult.ShowHelp();
-                }
-
-                return 1;
-            }
-            catch (Exception e) when (!e.ShouldBeDisplayedAsError())
-            {
-                // If telemetry object has not been initialized yet. It cannot be collected
-                TelemetryEventEntry.SendFiltered(e);
-                Reporter.Error.WriteLine(e.ToString().Red().Bold());
-
-                return 1;
-            }
-            finally
-            {
-                PerformanceLogEventSource.Log.CLIStop();
-            }
+            return HandleErrors(() => ProcessArgs(args, startupTime));
         }
         finally
         {
-            if (perLogEventListener != null)
+            perLogEventListener?.Dispose();
+        }
+    }
+
+    private static int HandleErrors(Func<int> action)
+    {
+        try
+        {
+            return action();
+        }
+        catch (Exception e) when (e.ShouldBeDisplayedAsError())
+        {
+            Reporter.Error.WriteLine(CommandLoggingContext.IsVerbose
+                ? e.ToString().Red().Bold()
+                : e.Message.Red().Bold());
+
+            var commandParsingException = e as CommandParsingException;
+            if (commandParsingException != null && commandParsingException.ParseResult != null)
             {
-                perLogEventListener.Dispose();
+                commandParsingException.ParseResult.ShowHelp();
             }
+
+            return 1;
+        }
+        catch (Exception e) when (!e.ShouldBeDisplayedAsError())
+        {
+            // If telemetry object has not been initialized yet. It cannot be collected
+            TelemetryEventEntry.SendFiltered(e);
+            Reporter.Error.WriteLine(e.ToString().Red().Bold());
+
+            return 1;
+        }
+        finally
+        {
+            PerformanceLogEventSource.Log.CLIStop();
         }
     }
 

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Performance": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ROOT": "D:\\repos\\sdk\\.dotnet"
+      }
+    }
+  }
+}

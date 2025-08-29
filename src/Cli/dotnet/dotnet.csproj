@@ -51,6 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="KlutzyNinja.VisualStudioInterop" />
     <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" />
     <PackageReference Include="Microsoft.VisualStudio.SolutionPersistence" />
     <PackageReference Include="Newtonsoft.Json" />
@@ -73,6 +74,14 @@
 
   <ItemGroup Condition=" '$(IncludeAspNetCoreRuntime)' != 'false' ">
     <PackageReference Include="Microsoft.AspNetCore.DeveloperCertificates.XPlat" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="vsinterop">
+      <HintPath>$(PkgKlutzyNinja_VSInterop)\lib\net9.0\vsinterop.dll</HintPath>
+      <Aliases>vsinterop</Aliases>
+      <Private>true</Private>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

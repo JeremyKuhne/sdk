@@ -34,8 +34,8 @@ internal class WorkloadInfoHelper : IWorkloadInfoHelper
         string userProfileDir = null,
         IWorkloadResolver workloadResolver = null)
     {
-        DotnetPath = dotnetDir ?? Path.GetDirectoryName(Environment.ProcessPath);
-        ReleaseVersion currentSdkReleaseVersion = new(currentSdkVersion ?? Product.Version);
+        DotnetPath = dotnetDir ?? @"C:\Program Files\dotnet\";// Path.GetDirectoryName(Environment.ProcessPath);
+        ReleaseVersion currentSdkReleaseVersion = new(currentSdkVersion ?? "10.0.100-preview.7.25380.108");// ?? Product.Version);
         _currentSdkFeatureBand = new SdkFeatureBand(currentSdkReleaseVersion);
 
         _targetSdkVersion = targetSdkVersion;
@@ -81,7 +81,7 @@ internal class WorkloadInfoHelper : IWorkloadInfoHelper
 #if !DOT_NET_BUILD_FROM_SOURCE
         if (OperatingSystem.IsWindows())
         {
-            VisualStudioWorkloads.GetInstalledWorkloads(WorkloadResolver, installedWorkloads);
+            VsWorkloads.GetInstalledWorkloads(WorkloadResolver, installedWorkloads);
         }
 #endif
         return installedWorkloads;

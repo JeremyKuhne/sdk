@@ -109,6 +109,4 @@
     <SharedHostVersion>$(MicrosoftNETCoreAppRuntimePackageVersion)</SharedHostVersion>
   </PropertyGroup>
 
-  <Import Project="build/GenerateResxSource.targets" />
-
 </Project>

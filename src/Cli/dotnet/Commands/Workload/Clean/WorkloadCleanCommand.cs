@@ -102,7 +102,7 @@ internal class WorkloadCleanCommand : WorkloadCommandBase
 #pragma warning restore CS8604
 
                     InstalledWorkloadsCollection vsWorkloads = new();
-                    VisualStudioWorkloads.GetInstalledWorkloads(bandedResolver, vsWorkloads, _cleanAll ? null : new SdkFeatureBand(sdkVersion));
+                    VsWorkloads.GetInstalledWorkloads(bandedResolver, vsWorkloads, _cleanAll ? null : new SdkFeatureBand(sdkVersion));
                     foreach (var vsWorkload in vsWorkloads.AsEnumerable())
                     {
                         vsWorkloadUninstallWarnings.Add(string.Format(CliCommandStrings.VSWorkloadNotRemoved, $"{vsWorkload.Key}", $"{vsWorkload.Value}"));

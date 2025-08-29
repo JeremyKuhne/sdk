@@ -219,7 +219,7 @@ internal class WorkloadManifestUpdater : IWorkloadManifestUpdater
             {
                 //  Also advertise updates for workloads installed by Visual Studio
                 InstalledWorkloadsCollection installedVSWorkloads = new InstalledWorkloadsCollection();
-                VisualStudioWorkloads.GetInstalledWorkloads(_workloadResolver, installedVSWorkloads, _sdkFeatureBand);
+                VsWorkloads.GetInstalledWorkloads(_workloadResolver, installedVSWorkloads, _sdkFeatureBand);
                 installedWorkloads = [.. installedWorkloads.Concat(installedVSWorkloads.AsEnumerable().Select(kvp => new WorkloadId(kvp.Key))).Distinct()];
             }
 #endif

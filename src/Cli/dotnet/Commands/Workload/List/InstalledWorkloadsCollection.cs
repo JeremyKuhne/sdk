@@ -7,7 +7,7 @@ using Microsoft.NET.Sdk.WorkloadManifestReader;
 
 namespace Microsoft.DotNet.Cli.Commands.Workload.List;
 
-internal class InstalledWorkloadsCollection
+public class InstalledWorkloadsCollection
 {
     private readonly Dictionary<string, string> _workloads;
 

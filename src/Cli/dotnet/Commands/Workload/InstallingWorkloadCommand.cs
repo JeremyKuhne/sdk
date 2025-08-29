@@ -460,7 +460,7 @@ internal abstract class InstallingWorkloadCommand : WorkloadCommandBase
 #if !DOT_NET_BUILD_FROM_SOURCE
         if (OperatingSystem.IsWindows())
         {
-            return VisualStudioWorkloads.WriteSDKInstallRecordsForVSWorkloads(_workloadInstaller, _workloadResolver, workloadsWithExistingInstallRecords, Reporter);
+            return VsWorkloads.WriteSDKInstallRecordsForVSWorkloads(_workloadInstaller, _workloadResolver, workloadsWithExistingInstallRecords, Reporter);
         }
 #endif
         return workloadsWithExistingInstallRecords;
